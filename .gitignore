@@ -1,45 +1,30 @@
-target/
-# Archivos y carpetas específicos de IDEs (Mantener si usas esos IDEs)
-
-### IntelliJ IDEA ###
-.idea/
-# ... (el resto de las líneas de IDEA)
-*.iws
-*.iml
-*.ipr
-
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-
-# Reglas adicionales para Maven (Asegura ignorar target en sub-módulos)
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/
-# Si tienes un proyecto multi-módulo, target puede aparecer en sub-directorios:
+# Directorios de compilación de Maven
+/target/
 **/target/
 
-# Archivos generados por el sistema operativo
-.DS_Store # Mac OS
-Thumbs.db # Windows
+# Archivos de configuración de IDEs
+../.idea/
+*.iml
+*.iws
+*.ipr
 
-### VS Code ###
+.classpath
+.project
+.settings
+.factorypath
+
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
 .vscode/
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
