@@ -1,13 +1,9 @@
-/target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+drawings/target/
+# Archivos y carpetas específicos de IDEs (Mantener si usas esos IDEs)
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+.idea/
+# ... (el resto de las líneas de IDEA)
 *.iws
 *.iml
 *.ipr
@@ -28,11 +24,22 @@
 /nbdist/
 /.nb-gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+
+# Reglas adicionales para Maven (Asegura ignorar target en sub-módulos)
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/
+# Si tienes un proyecto multi-módulo, target puede aparecer en sub-directorios:
+**/target/
+
+# Archivos generados por el sistema operativo
+.DS_Store # Mac OS
+Thumbs.db # Windows
 
 ### VS Code ###
 .vscode/
-
-### Mac OS ###
-.DS_Store
