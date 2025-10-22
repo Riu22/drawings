@@ -21,5 +21,7 @@
 
         <input type="submit" value="Register">
     </form>
+
+    <script src="<c:url value='/js/index.js'/>"></script>
 </body>
 </html>

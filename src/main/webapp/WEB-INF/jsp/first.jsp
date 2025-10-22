@@ -4,10 +4,15 @@
 
 <html>
 <head>
-    <title>First JSP Page</title>
+    <title>Welcome!</title>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/index.css'/>">
+</head>
 
 <body>
-<h1>Si sale esto no ha petado todo aun</h1>
-<a href="/login"><button >Login</button></a>
+    <div class="container">
+        <h1>¡Bienvenido a la Aplicación!</h1>
+        <a href="<c:url value='/login'/>" class="button-link">Login</a>
+        <a href="<c:url value='/register'/>" class="button-link">Register</a>
+    </div>
 </body>
 </html>
