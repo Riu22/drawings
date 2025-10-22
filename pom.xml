@@ -109,7 +109,7 @@
     <profile>
       <id>clase</id>
       <properties>
-        <tomcat.home>/directori/tomcat/clase</tomcat.home>
+        <tomcat.home>/home/superior/IdeaProjects/Practica1</tomcat.home>
       </properties>
     </profile>
   </profiles>
