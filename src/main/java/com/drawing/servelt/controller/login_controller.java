@@ -1,0 +1,36 @@
+package com.drawing.servelt.controller;
+import com.drawing.servelt.dao.user_dao;
+
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
+@WebServlet(value = "/login")
+public class login_controller extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/jsp/login.jsp")
+                .forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        user_dao user = new user_dao();
+        if (user.checkLogin(username, password)) {
+            HttpSession session = req.getSession();
+            session.setAttribute("user", username);
+            resp.sendRedirect("/private");
+            return;
+        }else{
+            req.setAttribute("error", "Invalid username or password");
+            req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+        }
+    }
+}

@@ -3,11 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
-<head>
-    <title>First JSP Page</title>
-
 <body>
-<h1>Si sale esto no ha petado todo aun</h1>
-<a href="/login"><button >Login</button></a>
+    <h2>Bienvenido a la zona privada, ${user}!</h2>
+    <a href="/logout">Cerrar sesión</a>
 </body>
 </html>
