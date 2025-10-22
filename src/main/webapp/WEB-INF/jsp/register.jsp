@@ -19,8 +19,9 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br><br>
 
-        <input type="submit" value="Register">
+        <button type="submit" id="registerButton">Register</button>
     </form>
+    <div id="passwordError" style="color: red; margin-top: 5px;"></div>
 
     <script src="<c:url value='/js/index.js'/>"></script>
 </body>

@@ -29,12 +29,15 @@ public class register_controller extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-            user_dao.add_user(username, password);
-            resp.sendRedirect(req.getContextPath() + "/login");
-        } else {
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             req.setAttribute("error", "Username and password cannot be empty");
             req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
+        } else if (password.length() < 5) {
+            req.setAttribute("error", "Password must be at least 5 characters long");
+            req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
+        } else {
+            user_dao.add_user(username, password);
+            resp.sendRedirect("/login");
         }
     }
 }
