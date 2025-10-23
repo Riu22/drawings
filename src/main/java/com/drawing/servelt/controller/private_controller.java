@@ -1,24 +1,37 @@
 package com.drawing.servelt.controller;
 
+import com.drawing.servelt.service.private_service;
+
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @WebServlet(value = "/private")
 public class private_controller extends HttpServlet {
+
+    private private_service privateService;
+
     @Override
-    protected void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse resp) throws javax.servlet.ServletException, java.io.IOException {
-        HttpSession session = req.getSession();
-        String user = (String)session.getAttribute("user");
-        if (user == null){
-            resp.sendRedirect("/login");
-            return;
-        }
-        req.setAttribute("user", user);
-
-        req.getRequestDispatcher("/WEB-INF/jsp/private.jsp")
-                .forward(req, resp);
-
+    public void init() {
+        privateService = new private_service();
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        String user = session.getAttribute("user").toString();
+
+        if (user != null) {
+            // usuari està dins
+
+            req.getRequestDispatcher("/WEB-INF/jsp/private.jsp").forward(req, resp);
+        } else {
+            // usuari no correcte
+            resp.sendRedirect("/login");
+        }
+    }
 }

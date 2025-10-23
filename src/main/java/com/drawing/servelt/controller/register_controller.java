@@ -1,6 +1,6 @@
 package com.drawing.servelt.controller;
 
-import com.drawing.servelt.dao.user_dao;
+import com.drawing.servelt.service.register_service;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,11 +12,11 @@ import java.io.IOException;
 @WebServlet(value = "/register")
 public class register_controller extends HttpServlet {
 
-    private user_dao user_dao;
+    private register_service registerService;
 
     @Override
     public void init(){
-        user_dao = new user_dao();
+        registerService = new register_service();
     }
 
     @Override
@@ -29,14 +29,12 @@ public class register_controller extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-            req.setAttribute("error", "Username and password cannot be empty");
-            req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
-        } else if (password.length() < 5) {
-            req.setAttribute("error", "Password must be at least 5 characters long");
+        String error = registerService.registerUser(username, password);
+
+        if (error != null) {
+            req.setAttribute("error", error);
             req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
         } else {
-            user_dao.add_user(username, password);
             resp.sendRedirect("/login");
         }
     }
