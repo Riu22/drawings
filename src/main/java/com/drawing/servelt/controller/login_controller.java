@@ -1,5 +1,5 @@
 package com.drawing.servelt.controller;
-//tengo que pedir el nombre real y el username y password
+
 import com.drawing.servelt.service.login_service;
 
 import javax.servlet.ServletException;
@@ -13,12 +13,7 @@ import java.io.IOException;
 @WebServlet(value = "/login")
 public class login_controller extends HttpServlet {
 
-    private login_service loginService;
-
-    @Override
-    public void init() {
-        loginService = new login_service();
-    }
+    private login_service loginService = new login_service();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

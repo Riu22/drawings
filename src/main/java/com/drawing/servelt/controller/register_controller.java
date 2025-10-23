@@ -12,12 +12,7 @@ import java.io.IOException;
 @WebServlet(value = "/register")
 public class register_controller extends HttpServlet {
 
-    private register_service registerService;
-
-    @Override
-    public void init(){
-        registerService = new register_service();
-    }
+    private register_service registerService = new register_service();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
