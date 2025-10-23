@@ -1,28 +1,23 @@
-const passwordInput = document.getElementById('password');
-const submitButton = document.getElementById('registerButton');
-const passwordErrorDiv = document.getElementById('passwordError');
+document.addEventListener('DOMContentLoaded', (event) => {
+    const passwordInput = document.getElementById('password');
+    const submitButton = document.getElementById('registerButton');
+    const passwordErrorDiv = document.getElementById('passwordError');
 
-passwordInput.addEventListener('input', () => {
-    // 1. Validamos la contraseña una sola vez y guardamos el resultado.
-    const isPasswordValid = validatePassword(passwordInput.value);
-    // 2. Usamos el resultado para actualizar el estado del botón.
-    updateSubmitButtonState(isPasswordValid);
-});
+    if (passwordInput && submitButton && passwordErrorDiv) {
+        submitButton.disabled = true;
 
-function validatePassword(password) {
-    const minLength = 5;
-    const isValid = password.length >= minLength;
-    console.log('Password:', password, 'Is valid?', isValid);
-    return isValid;
-}
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            const minLength = 5;
+            const isPasswordValid = password.length >= minLength;
 
-function updateSubmitButtonState(isValid) {
-    submitButton.disabled = !isValid; // Deshabilita el botón si la contraseña no es válida.
-    submitButton.innerHTML = 'Register'; // El texto del botón ya no cambia.
+            submitButton.disabled = !isPasswordValid;
 
-    if (isValid) {
-        passwordErrorDiv.innerHTML = ''; // Si es válida, borra el mensaje de error.
-    } else {
-        passwordErrorDiv.innerHTML = 'Password must be at least 5 characters long'; // Si es falsa, muestra el error en el div.
+            if (isPasswordValid) {
+                passwordErrorDiv.textContent = '';
+            } else {
+                passwordErrorDiv.textContent = 'La contraseña debe tener al menos 5 caracteres.';
+            }
+        });
     }
-}
+});
