@@ -15,7 +15,7 @@ public class register_controller extends HttpServlet {
     private user_dao user_dao;
 
     @Override
-    public void init() throws ServletException {
+    public void init(){
         user_dao = new user_dao();
     }
 

@@ -10,7 +10,6 @@ public class user_dao {
 
     static {
         users = new ArrayList<>();
-        users.add(new user("user", "password"));
         users.add(new user("jaume", "1234"));
         users.add(new user("admin", "admin"));
     }
