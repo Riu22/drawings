@@ -24,10 +24,6 @@
             <input type="submit" id="registerButton" value="Register">
         </form>
         <div id="passwordError" class="error-message" style="margin-top: 15px;"></div>
-
-        <div style="margin-top: 20px;">
-            <a href="<c:url value='/login'/>" class="button-link" style="background-color: #6c757d;">Volver al Login</a>
-        </div>
     </div>
     <script src="<c:url value='/js/index.js'/>"></script>
 </body>
