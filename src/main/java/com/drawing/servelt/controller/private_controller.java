@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(value = "/private")
+@WebServlet(value = "/home")
 public class private_controller extends HttpServlet {
 
-    private private_service privateService = new private_service();
+    final private_service privateService = new private_service();
 
 
 

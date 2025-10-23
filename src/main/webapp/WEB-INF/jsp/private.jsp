@@ -11,7 +11,7 @@
 <body>
     <div class="page-container">
         <nav class="sidebar">
-            <a href="/private" class="brand">Drawings</a>
+            <a href="/home" class="brand">Drawings</a>
             <div class="user-info">
                 <span>Bienvenido, ${user}!</span>
             </div>
@@ -35,6 +35,6 @@
         </main>
     </div>
 
-    <script src="/js/private.js"></script>
+    <script src="/js/canvas.js"></script>
 </body>
 </html>

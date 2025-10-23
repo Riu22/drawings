@@ -13,7 +13,7 @@ import java.io.IOException;
 @WebServlet(value = "/login")
 public class login_controller extends HttpServlet {
 
-    private login_service loginService = new login_service();
+    final login_service loginService = new login_service();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,7 +28,7 @@ public class login_controller extends HttpServlet {
         if (loginService.checkLogin(username, password)) {
             HttpSession session = req.getSession();
             session.setAttribute("user", username);
-            resp.sendRedirect("/private");
+            resp.sendRedirect("/home");
         } else {
             req.setAttribute("error", "Invalid username or password");
             req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
