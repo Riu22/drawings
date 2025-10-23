@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Register Page</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/index.css'/>">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
 </head>
 <body>
     <div class="container">
@@ -28,6 +28,6 @@
         </form>
         <div id="passwordError" class="error-message" style="margin-top: 15px;"></div>
     </div>
-    <script src="<c:url value='/js/index.js'/>"></script>
+    <script src="/js/index.js"></script>
 </body>
 </html>

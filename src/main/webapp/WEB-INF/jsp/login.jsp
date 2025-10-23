@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/index.css'/>">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
 </head>
 <body>
     <div class="container">
@@ -25,7 +25,7 @@
         </form>
 
         <div style="margin-top: 20px;">
-            <a href="<c:url value='/register'/>" class="button-link">Registrar</a>
+            <a href="/register" class="button-link">Registrar</a>
         </div>
     </div>
 </body>

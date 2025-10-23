@@ -13,25 +13,18 @@ import java.io.IOException;
 @WebServlet(value = "/private")
 public class private_controller extends HttpServlet {
 
-    private private_service privateService;
+    private private_service privateService = new private_service();
 
-    @Override
-    public void init() {
-        privateService = new private_service();
-    }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        String user = session.getAttribute("user").toString();
+        HttpSession session = req.getSession(false);
 
-        if (user != null) {
-            // usuari està dins
-
+        if (privateService.isUserLoggedIn(session)) {
             req.getRequestDispatcher("/WEB-INF/jsp/private.jsp").forward(req, resp);
         } else {
-            // usuari no correcte
-            resp.sendRedirect("/login");
+            resp.sendRedirect(req.getContextPath() + "/login");
         }
     }
 }

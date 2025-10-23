@@ -98,3 +98,10 @@ input[type="submit"]:hover {
     margin-bottom: 15px;
     font-weight: bold;
 }
+
+input[type="submit"]:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    transform: none;
+    color: #aaa;
+}
