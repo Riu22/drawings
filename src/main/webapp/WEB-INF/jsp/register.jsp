@@ -15,6 +15,9 @@
         </c:if>
 
         <form method="post" action="<c:url value="/register" />">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required autocomplete="off">
+
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required autocomplete="off">
 

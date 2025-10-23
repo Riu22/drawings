@@ -28,8 +28,9 @@ public class register_controller extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        String name = req.getParameter("name");
 
-        String error = registerService.registerUser(username, password);
+        String error = registerService.registerUser(username, password, name);
 
         if (error != null) {
             req.setAttribute("error", error);

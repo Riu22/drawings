@@ -10,21 +10,21 @@ public class user_dao_impl implements user_dao{
 
     static {
         users = new ArrayList<>();
-        users.add(new user("jaume", "1234"));
-        users.add(new user("admin", "admin"));
+        users.add(new user("jaume", "1234", "Jaume"));
+        users.add(new user("admin", "admin", "Admin"));
     }
     
     public boolean checkLogin(String username, String password) {
         for (user u : users) {
-            if (u.getName().equals(username) && u.getPassword().equals(password)) {
+            if (u.getUsername().equals(username) && u.getPassword().equals(password)) {
                 return true;
             }
         }
         return false;
     }
 
-    public void add_user(String username, String password) {
-        users.add(new user(username, password));
+    public void add_user(String username, String password, String name) {
+        users.add(new user(username, password, name));
     }
 
 }

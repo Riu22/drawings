@@ -1,5 +1,5 @@
 package com.drawing.servelt.controller;
-
+//tengo que pedir el nombre real y el username y password
 import com.drawing.servelt.service.login_service;
 
 import javax.servlet.ServletException;
