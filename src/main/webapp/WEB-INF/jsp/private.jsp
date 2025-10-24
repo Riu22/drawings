@@ -6,7 +6,6 @@
 <head>
     <title>Home</title> 
     <link rel="stylesheet" href="/css/home.css"> 
-    <%-- 1. Añadir el CSS de Coloris --%>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css"/>
 </head>
 <body>
@@ -35,15 +34,9 @@
             </div>
         </main>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
-    <script>
-        Coloris({
-            el: '#colorPicker',
-            themeMode: 'dark' 
-        });
-    </script>
     <script src="/js/color.js"></script>
-    <script src="/js/canvas.js"></script>
+    <script src="/js/drawing.js"></script>
 </body>
 </html>

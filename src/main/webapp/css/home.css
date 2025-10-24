@@ -2,7 +2,7 @@ body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #1a1a1a;
-    color: #f0f0f0;
+    color: #000000;
 }
 
 .page-container {
@@ -59,6 +59,7 @@ body {
 .canvas-container {
     flex-grow: 1;
     padding-right: 20px;
+    height: 100%; 
 }
 
 #drawingCanvas {
@@ -89,6 +90,12 @@ body {
     font-weight: bold;
     border: none;
     cursor: pointer;
+}
+
+/* Estilo para el botón de herramienta seleccionado */
+.controls-container .button-link.selected {
+    background-color: #6c757d; /* Un tono de gris */
+    border-color: #6c757d;
 }
 
 #colorPicker {

@@ -1,51 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('drawingCanvas');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-        const parent = canvas.parentElement;
-        canvas.width = parent.clientWidth;
-        canvas.height = parent.clientHeight;
-    }
-
-    let isDrawing = false;
-    let currentColor = '#000000'; 
-
-   
-    document.addEventListener('color', event => {
-        console.log('Nuevo color seleccionado:', event.detail.color);
-        currentColor = event.detail.color;
-        ctx.strokeStyle = currentColor;
-        ctx.fillStyle = currentColor;
+     Coloris({
+        el: '#colorPicker',
+        themeMode: 'dark',
+        swatches: [
+            '#d62828', '#f77f00', '#fcbf49', '#2a9d8f', '#0077b6', 
+            '#8338ec', '#ff006e', '#ffffff', '#8d99ae', '#000000'
+        ]
     });
 
-    function startDrawing(e) {
-        isDrawing = true;
-        draw(e); 
-    }
-
-    function stopDrawing() {
-        isDrawing = false;
-        ctx.beginPath(); 
-    }
-
-    function draw(e) {
-        if (!isDrawing) return;
-
-        ctx.lineWidth = 5; 
-        ctx.lineCap = 'round'; 
-
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(e.offsetX, e.offsetY);
-    }
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseleave', stopDrawing);
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    const colorPicker = document.getElementById('colorPicker');
+    colorPicker.addEventListener('input', (event) => {
+        console.log('Nuevo color seleccionado:', event.target.value);
+        
+        const colorChangeEvent = new CustomEvent('drawingColorChange', { 
+            detail: { color: event.target.value } 
+        });
+        document.dispatchEvent(colorChangeEvent);
+    });
 });
