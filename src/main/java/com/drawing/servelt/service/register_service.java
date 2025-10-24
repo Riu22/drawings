@@ -18,6 +18,6 @@ public class register_service {
             return "Password must be at least 5 characters long";
         }
         userDao.add_user(username, password, name);
-        return null; // No error
+        return null;
     }
 }
