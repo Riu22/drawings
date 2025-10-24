@@ -2,32 +2,32 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
-<head>
-    <title>Register Page</title>
-    <link rel="stylesheet" type="text/css" href="/css/index.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Register</h1>
+    <head>
+        <title>Register Page</title>
+        <link rel="stylesheet" type="text/css" href="/css/index.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Register</h1>
 
-        <c:if test="${not empty error}">
-            <p class="error-message">${error}</p>
-        </c:if>
+            <c:if test="${not empty error}">
+                <p class="error-message">${error}</p>
+            </c:if>
 
-        <form method="post" action="<c:url value="/register" />">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required autocomplete="off">
+            <form method="post" action="<c:url value="/register" />">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required autocomplete="off">
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required autocomplete="off">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required autocomplete="off">
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
 
-            <input type="submit" id="registerButton" value="Register">
-        </form>
-        <div id="passwordError" class="error-message" style="margin-top: 15px;"></div>
-    </div>
-    <script src="/js/index.js"></script>
-</body>
+                <input type="submit" id="registerButton" value="Register">
+            </form>
+            <div id="passwordError" class="error-message" style="margin-top: 15px;"></div>
+        </div>
+        <script src="/js/index.js"></script>
+    </body>
 </html>
