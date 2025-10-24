@@ -12,10 +12,11 @@ import java.io.IOException;
 @WebServlet(value = "/register")
 public class register_controller extends HttpServlet {
 
-    private register_service registerService = new register_service();
+    private register_service register_service = new register_service();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getSession().invalidate();
         req.getRequestDispatcher("/WEB-INF/jsp/register.jsp").forward(req, resp);
     }
 
@@ -25,7 +26,7 @@ public class register_controller extends HttpServlet {
         String password = req.getParameter("password");
         String name = req.getParameter("name");
 
-        String error = registerService.registerUser(username, password, name);
+        String error = register_service.registerUser(username, password, name);
 
         if (error != null) {
             req.setAttribute("error", error);

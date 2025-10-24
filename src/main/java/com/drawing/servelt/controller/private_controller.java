@@ -24,7 +24,7 @@ public class private_controller extends HttpServlet {
         if (privateService.isUserLoggedIn(session)) {
             req.getRequestDispatcher("/WEB-INF/jsp/private.jsp").forward(req, resp);
         } else {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            resp.sendRedirect("/login");
         }
     }
 }

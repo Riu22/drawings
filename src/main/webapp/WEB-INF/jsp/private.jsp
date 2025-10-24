@@ -4,9 +4,9 @@
 
 <html>
 <head>
-    <title>Private Area</title>
+    <title>Home</title> 
     <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/private.css">
+    <link rel="stylesheet" href="/css/home.css"> 
 </head>
 <body>
     <div class="page-container">
