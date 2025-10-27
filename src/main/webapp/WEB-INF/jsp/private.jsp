@@ -38,5 +38,6 @@
     <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
     <script src="/js/color.js"></script>
     <script src="/js/drawing.js"></script>
+    <script src="/js/konami.js"></script>
 </body>
 </html>
