@@ -6,7 +6,7 @@ import java.util.List;
 
 public class user_dao_impl implements user_dao{
 
-    private static List<user> users;
+    private static final List<user> users;
 
     static {
         users = new ArrayList<>();
@@ -25,6 +25,15 @@ public class user_dao_impl implements user_dao{
 
     public void add_user(String username, String password, String name) {
         users.add(new user(username, password, name));
+    }
+
+    public boolean user_exists(String username){
+        for (user u : users) {
+            if (u.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

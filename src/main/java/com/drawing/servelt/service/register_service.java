@@ -17,6 +17,9 @@ public class register_service {
         if (password.length() < 5) {
             return "Password must be at least 5 characters long";
         }
+        if (userDao.user_exists(username)) {
+            return "Username already exists";
+        }
         userDao.add_user(username, password, name);
         return null;
     }
