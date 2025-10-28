@@ -6,7 +6,7 @@ public class figura {
     String title;
     int id;
 
-    figura(String json, String author, String title, int id){
+    public figura(String json, String author, String title, int id){
         this.json = json;
         this.author = author;
         this.title = title;

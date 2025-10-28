@@ -4,8 +4,8 @@
 
 <html>
 <head>
-    <title>Home</title> 
-    <link rel="stylesheet" href="/css/home.css"> 
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/home.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.css"/>
 </head>
 <body>
@@ -30,14 +30,16 @@
                     <button id="triangleBtn" class="button-link">Triángulo</button>
                     <button id="freeDrawBtn" class="button-link">Dibujo Libre</button>
                     <input type="text" id="colorPicker" data-coloris value="#000000">
+                    <button id="saveButton" class="button-link">Guardar</button>
                 </div>
             </div>
         </main>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/gh/mdbassit/Coloris@latest/dist/coloris.min.js"></script>
     <script src="/js/color.js"></script>
     <script src="/js/drawing.js"></script>
     <script src="/js/konami.js"></script>
+    <script src="/js/save.js"></script>
 </body>
 </html>
