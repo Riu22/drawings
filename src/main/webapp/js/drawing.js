@@ -8,17 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const square_btn = document.getElementById('squareBtn');
     const triangle_btn = document.getElementById('triangleBtn');
     const free_draw_btn = document.getElementById('freeDrawBtn');
+    const size_picker = document.getElementById('sizePicker');
     const tool_buttons = [circle_btn, square_btn, triangle_btn, free_draw_btn];
 
     // Botones de deshacer/rehacer (añadir estos botones en tu HTML)
     const undo_btn = document.getElementById('undoBtn');
     const redo_btn = document.getElementById('redoBtn');
+    const clear_btn = document.getElementById('clearBtn');
+
 
     // Variables de estado para el dibujo
     let is_drawing = false;
     let current_color = document.getElementById('colorPicker')?.value || '#000000';
     let current_mode = 'freeDraw';
-    const shape_size = 50;
 
     // Historial para deshacer/rehacer**
     let history = [];
@@ -45,6 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             save_history(); // Guardar canvas vacío como primer estado
         }
+    }
+
+    function clear_canvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        save_history(); // Guardar en historial al limpiar
     }
 
     //Guardar estado en el historial
@@ -114,6 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (redo_btn) {
         redo_btn.addEventListener('click', redo);
     }
+    if (clear_btn) {
+        clear_btn.addEventListener('click', clear_canvas);
+    }
+
+
 
     //Atajos de teclado Ctrl+Z y Ctrl+Y**
     document.addEventListener('keydown', (e) => {
@@ -180,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dibujar formas geométricas centradas en la posición del clic
     function draw_shape(pos) {
         const { x, y } = pos;
+        const shape_size = size_picker ? parseInt(size_picker.value) : 5; // Obtener tamaño actual
         ctx.fillStyle = current_color;
 
         if (current_mode === 'circle') {
@@ -199,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fill();
         }
         
-        // **MODIFICADO: Guardar en historial después de dibujar forma**
+        // Guardar en historial después de dibujar forma
         save_history();
     }
 
@@ -220,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             is_drawing = false;
             ctx.beginPath();
             save_canvas_state();
-            save_history(); // **MODIFICADO: Guardar en historial al terminar trazo**
+            save_history(); // Guardar en historial al terminar trazo
         }
     }
 
@@ -229,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pos = e.clientX ? get_mouse_pos(canvas, e) : e;
         if (current_mode !== 'freeDraw' || !is_drawing) return;
 
-        ctx.lineWidth = 5;
+        ctx.lineWidth = size_picker ? parseInt(size_picker.value) : 5;
         ctx.lineCap = 'round';
         ctx.strokeStyle = current_color;
 
