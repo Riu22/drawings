@@ -30,6 +30,8 @@
                     <button id="triangleBtn" class="button-link">Triángulo</button>
                     <button id="freeDrawBtn" class="button-link">Dibujo Libre</button>
                     <input type="text" id="colorPicker" data-coloris value="#000000">
+                    <button id="undoBtn" class="button-link"> Deshacer</button>
+                    <button id="redoBtn" class="button-link"> Rehacer</button>
                     <button id="saveButton" class="button-link">Guardar</button>
                 </div>
             </div>

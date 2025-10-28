@@ -2,279 +2,259 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('drawingCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    
+    // Botones de herramientas
+    const circle_btn = document.getElementById('circleBtn');
+    const square_btn = document.getElementById('squareBtn');
+    const triangle_btn = document.getElementById('triangleBtn');
+    const free_draw_btn = document.getElementById('freeDrawBtn');
+    const tool_buttons = [circle_btn, square_btn, triangle_btn, free_draw_btn];
 
-    // Botones de herramientas de dibujo
-    const circleBtn = document.getElementById('circleBtn');
-    const squareBtn = document.getElementById('squareBtn');
-    const triangleBtn = document.getElementById('triangleBtn');
-    const freeDrawBtn = document.getElementById('freeDrawBtn');
-    const toolButtons = [circleBtn, squareBtn, triangleBtn, freeDrawBtn];
+    // Botones de deshacer/rehacer (añadir estos botones en tu HTML)
+    const undo_btn = document.getElementById('undoBtn');
+    const redo_btn = document.getElementById('redoBtn');
 
-    // Variables de estado
-    let isDrawing = false;
-    let currentColor = document.getElementById('colorPicker')?.value || '#000000';
-    let currentMode = 'freeDraw';
-    const shapeSize = 50;
+    // Variables de estado para el dibujo
+    let is_drawing = false;
+    let current_color = document.getElementById('colorPicker')?.value || '#000000';
+    let current_mode = 'freeDraw';
+    const shape_size = 50;
+
+    // **NUEVO: Historial para deshacer/rehacer**
+    let history = [];
+    let history_step = -1;
+    const max_history = 50; // Límite de pasos guardados
 
     // Marcar dibujo libre como herramienta inicial
-    freeDrawBtn.classList.add('selected');
+    free_draw_btn.classList.add('selected');
 
-    // Ajustar el canvas al tamaño de su contenedor
-    function resizeCanvas() {
-        const parent = canvas.parentElement;
-        canvas.width = parent.clientWidth;
-        canvas.height = parent.clientHeight;
-        ctx.strokeStyle = currentColor;
-        ctx.fillStyle = currentColor;
+    // --- Funciones para guardar y cargar desde localStorage ---
+    function save_canvas_state() {
+        localStorage.setItem('savedDrawing', canvas.toDataURL());
     }
 
-    // Actualizar color cuando el selector de color cambie
-    document.addEventListener('drawingColorChange', (event) => {
-        currentColor = event.detail.color;
-        ctx.strokeStyle = currentColor;
-        ctx.fillStyle = currentColor;
+    function load_canvas_state() {
+        const data_url = localStorage.getItem('savedDrawing');
+        if (data_url) {
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                save_history(); // Guardar el estado inicial en el historial
+            };
+            img.src = data_url;
+        } else {
+            save_history(); // Guardar canvas vacío como primer estado
+        }
+    }
+
+    // **NUEVO: Guardar estado en el historial**
+    function save_history() {
+        // Eliminar estados futuros si estamos en medio del historial
+        history_step++;
+        if (history_step < history.length) {
+            history.length = history_step;
+        }
+        
+        // Guardar el estado actual
+        history.push(canvas.toDataURL());
+        
+        // Limitar el tamaño del historial
+        if (history.length > max_history) {
+            history.shift();
+            history_step--;
+        }
+        
+        update_undo_redo_buttons();
+    }
+
+    // **NUEVO: Restaurar un estado del historial**
+    function restore_from_history(data_url) {
+        const img = new Image();
+        img.onload = function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = data_url;
+    }
+
+    // **NUEVO: Deshacer**
+    function undo() {
+        if (history_step > 0) {
+            history_step--;
+            restore_from_history(history[history_step]);
+            update_undo_redo_buttons();
+            save_canvas_state();
+        }
+    }
+
+    // **NUEVO: Rehacer**
+    function redo() {
+        if (history_step < history.length - 1) {
+            history_step++;
+            restore_from_history(history[history_step]);
+            update_undo_redo_buttons();
+            save_canvas_state();
+        }
+    }
+
+    // **NUEVO: Actualizar estado de botones**
+    function update_undo_redo_buttons() {
+        if (undo_btn) {
+            undo_btn.disabled = history_step <= 0;
+        }
+        if (redo_btn) {
+            redo_btn.disabled = history_step >= history.length - 1;
+        }
+    }
+
+    // **NUEVO: Eventos para deshacer/rehacer**
+    if (undo_btn) {
+        undo_btn.addEventListener('click', undo);
+    }
+    if (redo_btn) {
+        redo_btn.addEventListener('click', redo);
+    }
+
+    // **NUEVO: Atajos de teclado Ctrl+Z y Ctrl+Y**
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+            if (e.key === 'z' || e.key === 'Z') {
+                e.preventDefault();
+                if (e.shiftKey) {
+                    redo(); // Ctrl+Shift+Z = Rehacer
+                } else {
+                    undo(); // Ctrl+Z = Deshacer
+                }
+            } else if (e.key === 'y' || e.key === 'Y') {
+                e.preventDefault();
+                redo(); // Ctrl+Y = Rehacer
+            }
+        }
     });
 
-    // Cambiar herramienta de dibujo activa
-    function selectTool(button, mode) {
-        currentMode = mode;
-        toolButtons.forEach(btn => btn.classList.remove('selected'));
+    // Redimensionar el canvas al tamaño de su contenedor y actualizar estilos
+    function resize_canvas() {
+        const parent = canvas.parentElement;
+        const temp_image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        canvas.width = parent.clientWidth;
+        canvas.height = parent.clientHeight;
+        ctx.putImageData(temp_image_data, 0, 0);
+        ctx.strokeStyle = current_color;
+        ctx.fillStyle = current_color;
+    }
+
+    // Escuchar cambios externos en el color
+    document.addEventListener('drawingColorChange', (event) => {
+        current_color = event.detail.color;
+        ctx.strokeStyle = current_color;
+        ctx.fillStyle = current_color;
+    });
+
+    // Seleccionar una herramienta de dibujo
+    function select_tool(button, mode) {
+        current_mode = mode;
+        tool_buttons.forEach(btn => btn.classList.remove('selected'));
         button.classList.add('selected');
-        isDrawing = false;
+        is_drawing = false;
         ctx.beginPath();
     }
 
     // Asignar eventos a los botones de herramientas
-    circleBtn.addEventListener('click', () => selectTool(circleBtn, 'circle'));
-    squareBtn.addEventListener('click', () => selectTool(squareBtn, 'square'));
-    triangleBtn.addEventListener('click', () => selectTool(triangleBtn, 'triangle'));
-    freeDrawBtn.addEventListener('click', () => selectTool(freeDrawBtn, 'freeDraw'));
+    circle_btn.addEventListener('click', () => select_tool(circle_btn, 'circle'));
+    square_btn.addEventListener('click', () => select_tool(square_btn, 'square'));
+    triangle_btn.addEventListener('click', () => select_tool(triangle_btn, 'triangle'));
+    free_draw_btn.addEventListener('click', () => select_tool(free_draw_btn, 'freeDraw'));
 
-    // Obtener posición del ratón ajustada al canvas
-    function getMousePos(canvas, evt) {
+    // Obtener posición del ratón ajustada a la escala del canvas
+    function get_mouse_pos(canvas, evt) {
         const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
+        const scale_x = canvas.width / rect.width;
+        const scale_y = canvas.height / rect.height;
 
         return {
-            x: (evt.clientX - rect.left) * scaleX,
-            y: (evt.clientY - rect.top) * scaleY
+            x: (evt.clientX - rect.left) * scale_x,
+            y: (evt.clientY - rect.top) * scale_y
         };
     }
 
-    // Dibujar formas geométricas
-    function drawShape(pos) {
+    // Dibujar formas geométricas centradas en la posición del clic
+    function draw_shape(pos) {
         const { x, y } = pos;
-        ctx.fillStyle = currentColor;
+        ctx.fillStyle = current_color;
 
-        if (currentMode === 'circle') {
+        if (current_mode === 'circle') {
             ctx.beginPath();
-            ctx.arc(x, y, shapeSize / 2, 0, Math.PI * 2);
+            ctx.arc(x, y, shape_size / 2, 0, Math.PI * 2);
             ctx.fill();
-        } else if (currentMode === 'square') {
-            ctx.fillRect(x - shapeSize / 2, y - shapeSize / 2, shapeSize, shapeSize);
-        } else if (currentMode === 'triangle') {
+        } else if (current_mode === 'square') {
+            ctx.fillRect(x - shape_size / 2, y - shape_size / 2, shape_size, shape_size);
+        }  else if (current_mode === 'triangle') {
+            const height = (shape_size * Math.sqrt(3)) / 2;
+            
             ctx.beginPath();
-            ctx.moveTo(x, y - shapeSize / 2);
-            ctx.lineTo(x - shapeSize / 2, y + shapeSize / 2);
-            ctx.lineTo(x + shapeSize / 2, y + shapeSize / 2);
+            ctx.moveTo(x, y - height / 2);
+            ctx.lineTo(x - shape_size / 2, y + height / 2);
+            ctx.lineTo(x + shape_size / 2, y + height / 2);
             ctx.closePath();
             ctx.fill();
         }
+        
+        // **MODIFICADO: Guardar en historial después de dibujar forma**
+        save_history();
     }
 
-    // Iniciar dibujo al hacer clic
-    function startDrawing(e) {
-        const pos = getMousePos(canvas, e);
-        if (currentMode === 'freeDraw') {
-            isDrawing = true;
+    // Iniciar dibujo: comenzar trazo libre o colocar una forma
+    function start_drawing(e) {
+        const pos = get_mouse_pos(canvas, e);
+        if (current_mode === 'freeDraw') {
+            is_drawing = true;
             draw(pos);
         } else {
-            drawShape(pos);
+            draw_shape(pos);
         }
     }
 
-    // Detener dibujo al soltar el ratón
-    function stopDrawing() {
-        if (currentMode === 'freeDraw') {
-            isDrawing = false;
+    // Detener dibujo en modo libre
+    function stop_drawing() {
+        if (current_mode === 'freeDraw' && is_drawing) {
+            is_drawing = false;
             ctx.beginPath();
+            save_canvas_state();
+            save_history(); // **MODIFICADO: Guardar en historial al terminar trazo**
         }
     }
 
-    // Dibujar línea continua en modo libre
+    // Lógica de dibujo continuo para modo libre
     function draw(e) {
-        const pos = e.clientX ? getMousePos(canvas, e) : e;
-        if (currentMode !== 'freeDraw' || !isDrawing) return;
+        const pos = e.clientX ? get_mouse_pos(canvas, e) : e;
+        if (current_mode !== 'freeDraw' || !is_drawing) return;
 
         ctx.lineWidth = 5;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = currentColor;
-        
+        ctx.strokeStyle = current_color;
+
         ctx.lineTo(pos.x, pos.y);
         ctx.stroke();
-        ctx.beginPath();document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('drawingCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            // Botones de herramientas
-            const circleBtn = document.getElementById('circleBtn');
-            const squareBtn = document.getElementById('squareBtn');
-            const triangleBtn = document.getElementById('triangleBtn');
-            const freeDrawBtn = document.getElementById('freeDrawBtn');
-            const toolButtons = [circleBtn, squareBtn, triangleBtn, freeDrawBtn];
-
-            // Variables de estado para el dibujo
-            let isDrawing = false;
-            let currentColor = document.getElementById('colorPicker')?.value || '#000000';
-            let currentMode = 'freeDraw';
-            const shapeSize = 50;
-
-            // Marcar dibujo libre como herramienta inicial
-            freeDrawBtn.classList.add('selected');
-
-            // Redimensionar el canvas al tamaño de su contenedor y actualizar estilos
-            function resizeCanvas() {
-                const parent = canvas.parentElement;
-                canvas.width = parent.clientWidth;
-                canvas.height = parent.clientHeight;
-                ctx.strokeStyle = currentColor;
-                ctx.fillStyle = currentColor;
-            }
-
-            // Escuchar cambios externos en el color
-            document.addEventListener('drawingColorChange', (event) => {
-                currentColor = event.detail.color;
-                ctx.strokeStyle = currentColor;
-                ctx.fillStyle = currentColor;
-            });
-
-            // Seleccionar una herramienta de dibujo
-            function selectTool(button, mode) {
-                currentMode = mode;
-                toolButtons.forEach(btn => btn.classList.remove('selected'));
-                button.classList.add('selected');
-                // Detener cualquier trazo de dibujo libre en curso
-                isDrawing = false;
-                ctx.beginPath();
-            }
-
-            // Asignar eventos a los botones de herramientas
-            circleBtn.addEventListener('click', () => selectTool(circleBtn, 'circle'));
-            squareBtn.addEventListener('click', () => selectTool(squareBtn, 'square'));
-            triangleBtn.addEventListener('click', () => selectTool(triangleBtn, 'triangle'));
-            freeDrawBtn.addEventListener('click', () => selectTool(freeDrawBtn, 'freeDraw'));
-
-            // Obtener posición del ratón ajustada a la escala del canvas
-            function getMousePos(canvas, evt) {
-                const rect = canvas.getBoundingClientRect();
-                // Factores de escala para convertir coordenadas del cliente a coordenadas internas del canvas
-                const scaleX = canvas.width / rect.width;
-                const scaleY = canvas.height / rect.height;
-
-                return {
-                    x: (evt.clientX - rect.left) * scaleX,
-                    y: (evt.clientY - rect.top) * scaleY
-                };
-            }
-
-            // Dibujar formas geométricas centradas en la posición del clic
-            function drawShape(pos) {
-                const { x, y } = pos;
-                ctx.fillStyle = currentColor;
-
-                if (currentMode === 'circle') {
-                    ctx.beginPath();
-                    // Arco centrado en (x,y) con radio shapeSize/2
-                    ctx.arc(x, y, shapeSize / 2, 0, Math.PI * 2);
-                    ctx.fill();
-                } else if (currentMode === 'square') {
-                    // fillRect espera la esquina superior izquierda, restamos la mitad del tamaño para centrar
-                    ctx.fillRect(x - shapeSize / 2, y - shapeSize / 2, shapeSize, shapeSize);
-                } else if (currentMode === 'triangle') {
-                    // Triángulo: dibuja un triángulo isósceles centrado en (x,y)
-                    // Vértice superior en (x, y - shapeSize/2)
-                    // Vértice inferior izquierdo en (x - shapeSize/2, y + shapeSize/2)
-                    // Vértice inferior derecho en (x + shapeSize/2, y + shapeSize/2)
-                    ctx.beginPath();
-                    ctx.moveTo(x, y - shapeSize / 2);                    // vértice superior
-                    ctx.lineTo(x - shapeSize / 2, y + shapeSize / 2);    // vértice inferior izquierdo
-                    ctx.lineTo(x + shapeSize / 2, y + shapeSize / 2);    // vértice inferior derecho
-                    ctx.closePath();                                     // cerrar camino hasta el inicio
-                    ctx.fill();
-                }
-            }
-
-            // Iniciar dibujo: comenzar trazo libre o colocar una forma
-            function startDrawing(e) {
-                const pos = getMousePos(canvas, e);
-                if (currentMode === 'freeDraw') {
-                    // Para dibujo libre, activamos el modo dibujo y dibujamos el primer punto
-                    isDrawing = true;
-                    draw(pos);
-                } else {
-                    // Para formas, dibujamos una única forma rellena en la posición del clic
-                    drawShape(pos);
-                }
-            }
-
-            // Detener dibujo en modo libre
-            function stopDrawing() {
-                if (currentMode === 'freeDraw') {
-                    isDrawing = false;
-                    // beginPath evita que el siguiente trazo se conecte con el anterior
-                    ctx.beginPath();
-                }
-            }
-
-            // Lógica de dibujo continuo para modo libre
-            function draw(e) {
-                // Si se llama con un evento, calcula la posición; si se llama con un objeto pos, úsalo directamente
-                const pos = e.clientX ? getMousePos(canvas, e) : e;
-                if (currentMode !== 'freeDraw' || !isDrawing) return;
-
-                ctx.lineWidth = 5;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = currentColor;
-
-                // lineTo dibuja una línea desde el punto actual hasta (pos.x, pos.y)
-                // stroke() la renderiza. beginPath() seguido de moveTo() evita que el trazo crezca indefinidamente
-                ctx.lineTo(pos.x, pos.y);
-                ctx.stroke();
-                ctx.beginPath();
-                // Mover el cursor del trazo al punto actual para que el siguiente lineTo comience desde aquí
-                ctx.moveTo(pos.x, pos.y);
-            }
-
-            // Eventos del ratón en el canvas
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseleave', stopDrawing);
-
-            // Manejo de redimensionamiento y configuración inicial
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-
-            // Aplicar color inicial
-            ctx.strokeStyle = currentColor;
-            ctx.fillStyle = currentColor;
-        });
+        ctx.beginPath();
         ctx.moveTo(pos.x, pos.y);
     }
 
     // Eventos del ratón en el canvas
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mousedown', start_drawing);
+    canvas.addEventListener('mouseup', stop_drawing);
     canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseleave', stopDrawing);
+    canvas.addEventListener('mouseleave', stop_drawing);
 
-    // Ajustar canvas al cambiar tamaño de ventana
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    // Manejo de redimensionamiento y configuración inicial
+    window.addEventListener('resize', resize_canvas);
+    
+    // Primera configuración
+    const parent = canvas.parentElement;
+    canvas.width = parent.clientWidth;
+    canvas.height = parent.clientHeight;
+    load_canvas_state();
 
     // Aplicar color inicial
-    ctx.strokeStyle = currentColor;
-    ctx.fillStyle = currentColor;
+    ctx.strokeStyle = current_color;
+    ctx.fillStyle = current_color;
 });

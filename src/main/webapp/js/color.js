@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
     });
 
-    const colorPicker = document.getElementById('colorPicker');
-    colorPicker.addEventListener('input', (event) => {
+    const color_picker = document.getElementById('colorPicker');
+    color_picker.addEventListener('input', (event) => {
         console.log('Nuevo color seleccionado:', event.target.value);
         
-        const colorChangeEvent = new CustomEvent('drawingColorChange', { 
+        const color_change_event = new CustomEvent('drawingColorChange', { 
             detail: { color: event.target.value } 
         });
-        document.dispatchEvent(colorChangeEvent);
+        document.dispatchEvent(color_change_event);
     });
 });

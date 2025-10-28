@@ -1,6 +1,6 @@
 
-// Secuencia del código Konami: ↑ ↑ ↓ ↓ ← → ← → B A
-const secuenciaKonami = [
+//código Konami: ↑ ↑ ↓ ↓ ← → ← → B A
+const konami_sequence = [
     'ArrowUp', 
     'ArrowUp', 
     'ArrowDown', 
@@ -13,37 +13,37 @@ const secuenciaKonami = [
     'a'
 ];
 
-let secuenciaActual = [];
-let tiempoUltimaTecla = Date.now();
-const TIEMPO_RESET = 3000; // 3 segundos para resetear si no se completa
+let current_sequence = [];
+let last_key_time = Date.now();
+const RESET_TIME = 3000; 
 
 document.addEventListener('keydown', (e) => {
-    const tiempoActual = Date.now();
+    const current_time = Date.now();
     
     // Resetear si ha pasado mucho tiempo
-    if (tiempoActual - tiempoUltimaTecla > TIEMPO_RESET) {
-        secuenciaActual = [];
+    if (current_time - last_key_time > RESET_TIME) {
+        current_sequence = [];
     }
     
-    tiempoUltimaTecla = tiempoActual;
+    last_key_time = current_time;
     
     // Añadir tecla a la secuencia
-    secuenciaActual.push(e.key);
+    current_sequence.push(e.key);
     
     // Mantener solo las últimas teclas necesarias
-    if (secuenciaActual.length > secuenciaKonami.length) {
-        secuenciaActual.shift();
+    if (current_sequence.length > konami_sequence.length) {
+        current_sequence.shift();
     }
     
     // Verificar si la secuencia coincide
-    if (JSON.stringify(secuenciaActual) === JSON.stringify(secuenciaKonami)) {
+    if (JSON.stringify(current_sequence) === JSON.stringify(konami_sequence)) {
         console.log('¡CÓDIGO KONAMI ACTIVADO!');
-        dibujarKonami();
-        secuenciaActual = []; // Resetear
+        draw_konami();
+        current_sequence = []; // Resetear
     }
 });
 
-function dibujarKonami() {
+function draw_konami() {
     const canvas = document.getElementById('drawingCanvas');
     if (!canvas) return;
     
@@ -61,23 +61,21 @@ function dibujarKonami() {
     ctx.textBaseline = 'middle';
     
     // Calcular posición central
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const center_x = canvas.width / 2;
+    const center_y = canvas.height / 2;
     
     // Efecto de destello
     ctx.shadowColor = '#FF0000';
     ctx.shadowBlur = 20;
     
     // Dibujar el texto
-    ctx.strokeText('KONAMI', centerX, centerY);
-    ctx.fillText('KONAMI', centerX, centerY);
+    ctx.strokeText('KONAMI', center_x, center_y);
+    ctx.fillText('KONAMI', center_x, center_y);
     
     // Restaurar el estado
     ctx.restore();
     
-    // Opcional: hacer que desaparezca después de 2 segundos
     setTimeout(() => {
-        // Puedes decidir si limpiar el canvas o dejarlo
         console.log('Efecto Konami completado');
     }, 2000);
 }
