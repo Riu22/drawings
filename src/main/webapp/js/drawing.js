@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let current_mode = 'freeDraw';
     const shape_size = 50;
 
-    // **NUEVO: Historial para deshacer/rehacer**
+    // Historial para deshacer/rehacer**
     let history = [];
     let history_step = -1;
     const max_history = 50; // Límite de pasos guardados
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Marcar dibujo libre como herramienta inicial
     free_draw_btn.classList.add('selected');
 
-    // --- Funciones para guardar y cargar desde localStorage ---
+    // Funciones para guardar y cargar desde localStorage
     function save_canvas_state() {
         localStorage.setItem('savedDrawing', canvas.toDataURL());
     }
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // **NUEVO: Guardar estado en el historial**
+    //Guardar estado en el historial
     function save_history() {
         // Eliminar estados futuros si estamos en medio del historial
         history_step++;
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         update_undo_redo_buttons();
     }
 
-    // **NUEVO: Restaurar un estado del historial**
+    //Restaurar un estado del historial
     function restore_from_history(data_url) {
         const img = new Image();
         img.onload = function() {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = data_url;
     }
 
-    // **NUEVO: Deshacer**
+    //Deshacer
     function undo() {
         if (history_step > 0) {
             history_step--;
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // **NUEVO: Rehacer**
+    //Rehacer
     function redo() {
         if (history_step < history.length - 1) {
             history_step++;
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // **NUEVO: Actualizar estado de botones**
+    //Actualizar estado de botones
     function update_undo_redo_buttons() {
         if (undo_btn) {
             undo_btn.disabled = history_step <= 0;
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // **NUEVO: Eventos para deshacer/rehacer**
+    //Eventos para deshacer/rehacer
     if (undo_btn) {
         undo_btn.addEventListener('click', undo);
     }
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         redo_btn.addEventListener('click', redo);
     }
 
-    // **NUEVO: Atajos de teclado Ctrl+Z y Ctrl+Y**
+    //Atajos de teclado Ctrl+Z y Ctrl+Y**
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey || e.metaKey) {
             if (e.key === 'z' || e.key === 'Z') {
