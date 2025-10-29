@@ -1,4 +1,3 @@
-
 //código Konami: ↑ ↑ ↓ ↓ ← → ← → B A
 const konami_sequence = [
     'ArrowUp', 
@@ -49,6 +48,9 @@ function draw_konami() {
     
     const ctx = canvas.getContext('2d');
     
+    // Guardar el contenido actual del canvas
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    
     // Guardar el estado actual del canvas
     ctx.save();
     
@@ -75,7 +77,9 @@ function draw_konami() {
     // Restaurar el estado
     ctx.restore();
     
+    // Eliminar el texto después de 3 segundos
     setTimeout(() => {
+        ctx.putImageData(imageData, 0, 0);
         console.log('Efecto Konami completado');
-    }, 2000);
+    }, 3000);
 }
