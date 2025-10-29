@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         update_undo_redo_buttons();
+        save_canvas_state();
     }
 
     //Restaurar un estado del historial
