@@ -156,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-
     //Atajos de teclado Ctrl+Z y Ctrl+Y**
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey || e.metaKey) {
@@ -268,13 +267,21 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fill();
         } else if (current_mode === 'square') {
             ctx.fillRect(x - shape_size / 2, y - shape_size / 2, shape_size, shape_size);
-        }  else if (current_mode === 'triangle') {
-            const height = (shape_size * Math.sqrt(3)) / 2;
+        } else if (current_mode === 'triangle') {
+            // Altura total del triángulo equilátero: √(lado² - (lado/2)²)
+            const altura_total = Math.sqrt(Math.pow(shape_size, 2) - Math.pow(shape_size / 2, 2));
+            
+            // Dividir la altura en 3 partes
+            const altura_base = altura_total / 3;  // Altura desde la base al centro
+            const altura_punta = altura_total - altura_base;  // Altura desde el centro a la punta
             
             ctx.beginPath();
-            ctx.moveTo(x, y - height / 2);
-            ctx.lineTo(x - shape_size / 2, y + height / 2);
-            ctx.lineTo(x + shape_size / 2, y + height / 2);
+            // Punto superior (centro - altura_punta hacia arriba)
+            ctx.moveTo(x, y - altura_punta);
+            // Punto inferior izquierdo (centro - mitad del lado, centro + altura_base hacia abajo)
+            ctx.lineTo(x - shape_size / 2, y + altura_base);
+            // Punto inferior derecho (centro + mitad del lado, centro + altura_base hacia abajo)
+            ctx.lineTo(x + shape_size / 2, y + altura_base);
             ctx.closePath();
             ctx.fill();
         }
