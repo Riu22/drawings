@@ -168,3 +168,51 @@ input[type="range"]::-moz-range-track {
     height: 8px;
     border-radius: 5px;
 }
+
+.object-item {
+    padding: 8px;
+    margin: 5px 0;
+    background: white;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.object-item:hover {
+    background: #e8e8e8;
+}
+
+.object-item.selected {
+    background: #d0e8ff;
+    border: 2px solid #0066cc;
+}
+
+.object-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+}
+
+.delete-btn {
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.delete-btn:hover {
+    background: #cc0000;
+}

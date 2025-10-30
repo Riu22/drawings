@@ -35,6 +35,7 @@
                     <button id="undoBtn" class="button-link"> Deshacer</button>
                     <button id="redoBtn" class="button-link"> Rehacer</button>
                     <button id="saveButton" class="button-link">Guardar</button>
+                    <div id="objectList"></div>
                 </div>
             </div>
         </main>
