@@ -6,25 +6,35 @@ import java.util.List;
 
 public class figura_dao_impl implements figura_dao {
 
-    private static final List<figura> drawings = new ArrayList<>();
+    private static final figura_dao_impl INSTANCE = new figura_dao_impl();
+
+    private final List<figura> drawings = new ArrayList<>();
     private int idCounter = 0;
 
-    @Override
-    public void add_figura(String json, String author, String title) {
-        System.out.println("Añadiendo figura - JSON: " + json);
-        System.out.println("Autor: " + author);
-        System.out.println("Título: " + title);
+    // Constructor privado para evitar múltiples instancias
+    private figura_dao_impl() {}
 
-        figura newDrawing = new figura(json, author, title, idCounter);
-        drawings.add(newDrawing);
-        idCounter++;
-
-        System.out.println("Tamaño actual de la lista: " + drawings.size());
+    // Método para obtener la única instancia
+    public static figura_dao_impl getInstance() {
+        return INSTANCE;
     }
 
     @Override
-    public List<figura> get_all_figuras() {
+    public void add_figura(String imageData, String author, String title) {
+        int id = idCounter++;
+        figura newDrawing = new figura(imageData, author, title, id);
+        drawings.add(newDrawing);
+        System.out.println("✅ Dibujo guardado: " + title + " - Total: " + drawings.size());
+    }
+
+    @Override
+    public  List<figura> get_all_figuras() {
+        System.out.println("📋 Recuperando " + drawings.size() + " dibujos");
         return new ArrayList<>(drawings);
     }
 
+    @Override
+    public void delete_figura(int id) {
+        drawings.removeIf(drawing -> drawing.getId() == id);
+    }
 }

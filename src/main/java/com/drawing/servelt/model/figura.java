@@ -1,23 +1,23 @@
 package com.drawing.servelt.model;
 
-
 public class figura {
-    String json;
+    String imageData;
     String author;
     String title;
     int id;
 
-    public figura(String json, String author, String title, int id){
-        this.json = json;
+    public figura(String imageData, String author, String title, int id){
+        this.imageData = imageData;
         this.author = author;
         this.title = title;
+        this.id = id;
     }
 
-    public String getJson() {
-        return json;
+    public String getImageData() {
+        return imageData;
     }
-    public void setJson(String json) {
-        this.json = json;
+    public void setImageData(String imageData) {
+        this.imageData = imageData;
     }
 
     public String getAuthor(){

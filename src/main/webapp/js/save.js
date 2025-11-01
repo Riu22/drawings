@@ -1,46 +1,40 @@
-document.getElementById('saveButton').addEventListener('click', async function () {
-    try {
-        const canvas = document.getElementById('drawingCanvas');
+document.getElementById('saveButton').addEventListener('click', function() {
+    const canvas = document.getElementById('drawingCanvas');
+    const title = prompt("Por favor, introduce un título para tu dibujo:");
 
-        if (!canvas || !canvas.getContext) {
-            throw new Error('Canvas no encontrado o no soportado');
-        }
+    if (title) {
+        const dataURL = canvas.toDataURL();
+        const formData = new URLSearchParams();
+        formData.append('imageData', dataURL);
+        formData.append('title', title);
 
-        const title = prompt("Por favor, introduce un título para tu dibujo:");
-        if (!title || title.trim() === '') {
-            alert('Por favor, introduce un título válido');
-            return;
-        }
+        // ========== DEBUG ==========
+        console.log('📤 Enviando dibujo:');
+        console.log('- Título:', title);
+        console.log('- ImageData length:', dataURL.length);
+        console.log('- ImageData preview:', dataURL.substring(0, 50) + '...');
+        // ===========================
 
-        // Obtener datos del dibujo como JSON
-        const ctx = canvas.getContext('2d');
-        const drawing_data = {
-            width: canvas.width,
-            height: canvas.height,
-            imageData: canvas.toDataURL()
-        };
-
-        const form_data = new URLSearchParams();
-        form_data.append('json', JSON.stringify(drawing_data));  // Convertir a string JSON
-        form_data.append('title', title.trim());
-
-        const response = await fetch('save', {
+        fetch('/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: form_data
+            body: formData
+        })
+        .then(response => {
+            console.log('📥 Status:', response.status); // DEBUG
+            return response.json();
+        })
+        .then(data => {
+            console.log('✅ Respuesta del servidor:', data);
+            alert('¡Dibujo guardado con éxito!');
+        })
+        .catch((error) => {
+            console.error('❌ Error al guardar los datos:', error);
+            alert('Error al guardar el dibujo.');
         });
-
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-
-        console.log('Respuesta del servidor:', await response.text());
-        alert('¡Dibujo guardado con éxito!');
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert(`Error al guardar el dibujo: ${error.message}`);
+    } else {
+        console.log('⚠️ No se introdujo título');
     }
 });
