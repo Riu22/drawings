@@ -9,7 +9,7 @@ document.getElementById('saveButton').addEventListener('click', function() {
         formData.append('title', title);
 
         // ========== DEBUG ==========
-        console.log('📤 Enviando dibujo:');
+        console.log('Enviando dibujo:');
         console.log('- Título:', title);
         console.log('- ImageData length:', dataURL.length);
         console.log('- ImageData preview:', dataURL.substring(0, 50) + '...');
@@ -23,18 +23,18 @@ document.getElementById('saveButton').addEventListener('click', function() {
             body: formData
         })
         .then(response => {
-            console.log('📥 Status:', response.status); // DEBUG
+            console.log('Status:', response.status); // DEBUG
             return response.json();
         })
         .then(data => {
-            console.log('✅ Respuesta del servidor:', data);
-            alert('¡Dibujo guardado con éxito!');
+            console.log('Respuesta del servidor:', data);
+            alert('Dibujo guardado con éxito');
         })
         .catch((error) => {
-            console.error('❌ Error al guardar los datos:', error);
+            console.error('Error al guardar los datos:', error);
             alert('Error al guardar el dibujo.');
         });
     } else {
-        console.log('⚠️ No se introdujo título');
+        console.log('No se introdujo título');
     }
 });

@@ -21,10 +21,8 @@ public class save_controller extends HttpServlet {
 
         if (imageData != null && !imageData.isEmpty() && title != null && !title.isEmpty()) {
             figuraDAO.add_figura(imageData, author, title);
-            resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write("{\"message\": \"Drawing saved successfully!\"}");
         } else {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\": \"Missing drawing data or title.\"}");
         }
     }

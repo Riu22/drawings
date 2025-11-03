@@ -11,7 +11,6 @@ public class figura_dao_impl implements figura_dao {
     private final List<figura> drawings = new ArrayList<>();
     private int idCounter = 0;
 
-    // Constructor privado para evitar múltiples instancias
     private figura_dao_impl() {}
 
     // Método para obtener la única instancia
@@ -24,12 +23,12 @@ public class figura_dao_impl implements figura_dao {
         int id = idCounter++;
         figura newDrawing = new figura(imageData, author, title, id);
         drawings.add(newDrawing);
-        System.out.println("✅ Dibujo guardado: " + title + " - Total: " + drawings.size());
+        System.out.println("Dibujo guardado: " + title + " - Total: " + drawings.size());
     }
 
     @Override
     public  List<figura> get_all_figuras() {
-        System.out.println("📋 Recuperando " + drawings.size() + " dibujos");
+        System.out.println("Recuperando " + drawings.size() + " dibujos");
         return new ArrayList<>(drawings);
     }
 
