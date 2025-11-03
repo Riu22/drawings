@@ -14,7 +14,7 @@ public class save_controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
+        resp.setContentType("application/x-www-form-urlencoded");
         resp.setCharacterEncoding("UTF-8");
 
         String imageData = req.getParameter("imageData");
