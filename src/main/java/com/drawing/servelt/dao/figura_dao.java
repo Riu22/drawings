@@ -10,4 +10,5 @@ public interface figura_dao {
     static figura_dao getInstance() {
         return figura_dao_impl.getInstance();
     }
+    figura get_figura_by_id(int id);
 }

@@ -12,21 +12,28 @@
             display: none; 
             position: fixed; 
             z-index: 1; 
-            padding-top: 100px; 
+            padding-top: 50px;
             left: 0;
             top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgb(0,0,0); 
-            background-color: rgba(0,0,0,0.9); 
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
         }
 
-        .modal-content {
+        .modal-content-wrapper {
             margin: auto;
             display: block;
-            width: 80%;
-            max-width: 700px;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        #modalCanvas {
+            border: 2px solid #fff;
+            background: white;
+            max-width: 100%;
+            height: auto;
         }
 
         .close {
@@ -37,13 +44,19 @@
             font-size: 40px;
             font-weight: bold;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .close:hover,
         .close:focus {
             color: #bbb;
             text-decoration: none;
-            cursor: pointer;
+        }
+
+        .modal-info {
+            color: #ccc;
+            font-size: 16px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -60,6 +73,12 @@
 
         <main class="main-content">
             <h1>Galería de Dibujos</h1>
+                <c:if test="${not empty sessionScope.error}">
+                    <div style="background-color: #f44336; color: white; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                        ${sessionScope.error}
+                    </div>
+                    <c:remove var="error" scope="session"/>
+                </c:if>
             <div class="gallery-container">
                 <c:forEach var="drawing" items="${drawings}">
                     <div class="drawing-item">
@@ -72,7 +91,10 @@
                                 <input type="hidden" name="id" value="${drawing.id}">
                                 <button type="submit">Eliminar</button>
                             </form>
-                            <button class="view-btn" data-img-src="${drawing.imageData}">View</button>
+                            <button class="view-btn"
+                                    data-img-src="${drawing.imageData}"
+                                    data-title="${drawing.title}"
+                                    data-author="${drawing.author}">View</button>
                         </div>
                     </div>
                 </c:forEach>
@@ -83,33 +105,59 @@
     <!-- The Modal -->
     <div id="myModal" class="modal">
         <span class="close">&times;</span>
-        <img class="modal-content" id="img01">
+        <div class="modal-content-wrapper">
+            <h2 id="modalTitle" style="color: white; margin-bottom: 10px;"></h2>
+            <p id="modalAuthor" class="modal-info"></p>
+            <canvas id="modalCanvas"></canvas>
+        </div>
     </div>
 
     <script>
-        // Get the modal
         var modal = document.getElementById("myModal");
-
-        // Get the image and insert it inside the modal
-        var modalImg = document.getElementById("img01");
-        
-        // Get all view buttons
+        var modalCanvas = document.getElementById("modalCanvas");
+        var modalTitle = document.getElementById("modalTitle");
+        var modalAuthor = document.getElementById("modalAuthor");
+        var ctx = modalCanvas.getContext("2d");
         var viewBtns = document.getElementsByClassName("view-btn");
+        var span = document.getElementsByClassName("close")[0];
 
-        // Loop through all view buttons and add click event
+        // Add click event to all view buttons
         for (var i = 0; i < viewBtns.length; i++) {
             viewBtns[i].onclick = function() {
+                var imgSrc = this.getAttribute('data-img-src');
+                var title = this.getAttribute('data-title');
+                var author = this.getAttribute('data-author');
+
+                // Show modal
                 modal.style.display = "block";
-                modalImg.src = this.getAttribute('data-img-src');
+                modalTitle.textContent = title;
+                modalAuthor.textContent = "Por: " + author;
+
+                // Load image and draw on canvas
+                var img = new Image();
+                img.onload = function() {
+                    // Set canvas size to image size
+                    modalCanvas.width = img.width;
+                    modalCanvas.height = img.height;
+
+                    // Draw image on canvas
+                    ctx.clearRect(0, 0, modalCanvas.width, modalCanvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = imgSrc;
             }
         }
 
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on <span> (x), close the modal
+        // Close modal when clicking X
         span.onclick = function() {
             modal.style.display = "none";
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
     </script>
 

@@ -1,7 +1,6 @@
 package com.drawing.servelt.controller;
 
 import com.drawing.servelt.dao.figura_dao;
-import com.drawing.servelt.dao.figura_dao_impl;
 import com.drawing.servelt.model.figura;
 import com.drawing.servelt.service.private_service;
 
@@ -25,7 +24,6 @@ public class gallery_controller extends HttpServlet {
         HttpSession session = req.getSession(false);
 
         if (privateService.isUserLoggedIn(session)) {
-            // Obtener usuario de la sesión
             String username = (String) session.getAttribute("user");
             req.setAttribute("user", username);
 
@@ -65,14 +63,27 @@ public class gallery_controller extends HttpServlet {
         String action = req.getParameter("action");
         if ("delete".equals(action)) {
             String idParam = req.getParameter("id");
-            if (idParam != null) {
+            if (idParam != null && !idParam.trim().isEmpty()) {
                 try {
                     int id = Integer.parseInt(idParam);
-                    // Ajusta el nombre del método DAO si es distinto en tu proyecto
-                    figuraDAO.delete_figura(id);
+                    String current_user = (String) session.getAttribute("user");
+                    figura drawing = figuraDAO.get_figura_by_id(id);
+                    if (drawing != null){
+                        if (drawing.getAuthor().equals(current_user)){
+                            figuraDAO.delete_figura(id);
+                            System.out.println("dibujo" + id + "eliminado");
+                        }else {
+                            System.out.println("el usuario" + current_user + "no es el autor del dibujo" + id);
+                            session.setAttribute("error", "No tienes permiso para eliminar este dibujo.");
+                        }
+                    }else {
+                        System.out.println("dibujo" + id + "no encontrado");
+                        session.setAttribute("error", "Dibujo no encontrado.");
+                    }
                 } catch (NumberFormatException e) {
-
-                }// ignorar o loguear
+                    System.err.println("error al parsear ID: " + e.getMessage());
+                    session.setAttribute("error", "ID de dibujo inválido");
+                }
             }
         }
         resp.sendRedirect(req.getContextPath() + "/gallery");

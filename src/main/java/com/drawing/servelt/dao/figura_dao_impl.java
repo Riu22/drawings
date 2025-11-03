@@ -37,4 +37,12 @@ public class figura_dao_impl implements figura_dao {
     public void delete_figura(int id) {
         drawings.removeIf(drawing -> drawing.getId() == id);
     }
+
+    @Override
+    public figura get_figura_by_id(int id) {
+        return drawings.stream()
+                .filter(drawing -> drawing.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
 }
