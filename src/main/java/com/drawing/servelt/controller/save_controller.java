@@ -1,7 +1,6 @@
 package com.drawing.servelt.controller;
 
-import com.drawing.servelt.dao.figura_dao;
-import com.drawing.servelt.dao.figura_dao_impl;
+import com.drawing.servelt.service.save_service;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,16 +10,20 @@ import java.io.IOException;
 @WebServlet("/save")
 public class save_controller extends HttpServlet {
 
-    private final figura_dao figuraDAO =  figura_dao.getInstance();
+    private final save_service saveService = new save_service();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
         String imageData = req.getParameter("imageData");
         String title = req.getParameter("title");
         String author = (String) req.getSession().getAttribute("user");
 
-        if (imageData != null && !imageData.isEmpty() && title != null && !title.isEmpty()) {
-            figuraDAO.add_figura(imageData, author, title);
+        boolean success = saveService.save_drawing(imageData, title, author);
+
+        if (success) {
             resp.getWriter().write("{\"message\": \"Drawing saved successfully!\"}");
         } else {
             resp.getWriter().write("{\"error\": \"Missing drawing data or title.\"}");
