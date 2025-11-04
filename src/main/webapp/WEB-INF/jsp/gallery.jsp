@@ -91,10 +91,7 @@
                                 <input type="hidden" name="id" value="${drawing.id}">
                                 <button type="submit">Eliminar</button>
                             </form>
-                            <button class="view-btn"
-                                    data-img-src="${drawing.imageData}"
-                                    data-title="${drawing.title}"
-                                    data-author="${drawing.author}">View</button>
+                           <a href="${pageContext.request.contextPath}/drawing-detail?id=${drawing.id}" class="btn">    Ver Detalles</a>
                         </div>
                     </div>
                 </c:forEach>
@@ -102,15 +99,7 @@
         </main>
     </div>
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close">&times;</span>
-        <div class="modal-content-wrapper">
-            <h2 id="modalTitle" style="color: white; margin-bottom: 10px;"></h2>
-            <p id="modalAuthor" class="modal-info"></p>
-            <canvas id="modalCanvas"></canvas>
-        </div>
-    </div>
+ 
 
     <script>
         var modal = document.getElementById("myModal");

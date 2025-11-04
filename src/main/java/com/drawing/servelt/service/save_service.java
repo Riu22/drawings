@@ -6,13 +6,13 @@ public class save_service {
 
     private final figura_dao figuraDAO = figura_dao.getInstance();
 
-    public boolean save_drawing(String imageData, String title, String author) {
+    public boolean save_drawing(String imageData, String title, String author, int object_count) {
         if (!is_valid_drawing_data(imageData, title, author)) {
             System.out.println("Intento de guardar dibujo con datos inválidos");
             return false;
         }
 
-        figuraDAO.add_figura(imageData, author, title);
+        figuraDAO.add_figura(imageData, author, title,object_count);
         System.out.println("Dibujo '" + title + "' guardado por " + author);
         return true;
     }

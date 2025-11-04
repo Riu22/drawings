@@ -19,12 +19,13 @@ public class figura_dao_impl implements figura_dao {
     }
 
     @Override
-    public void add_figura(String imageData, String author, String title) {
+    public void add_figura(String imageData, String author, String title, int objectCount) {
         int id = idCounter++;
-        figura newDrawing = new figura(imageData, author, title, id);
+        figura newDrawing = new figura(imageData, author, title, id, objectCount);
         drawings.add(newDrawing);
-        System.out.println("Dibujo guardado: " + title + " - Total: " + drawings.size());
+        System.out.println("✅ Dibujo guardado: " + title + " - Total: " + drawings.size());
     }
+
 
     @Override
     public  List<figura> get_all_figuras() {
@@ -44,4 +45,15 @@ public class figura_dao_impl implements figura_dao {
                 .findFirst()
                 .orElse(null);
     }
+    @Override
+    public void update_figura(figura draw) {
+        for (int i = 0; i < drawings.size(); i++) {
+            if (drawings.get(i).getId() == draw.getId()) {
+                drawings.set(i, draw);
+                System.out.println("Dibujo " + draw.getId() + " actualizado");
+                return;
+            }
+        }
+    }
+
 }
