@@ -370,19 +370,39 @@ document.addEventListener('DOMContentLoaded', () => {
                         return obj;
                     }
                 } else if (obj.type === 'triangle') {
+                    // Teorema de Pitágoras: h = sqrt(lado^2 - (base/2)^2)
                     const altura_total = Math.sqrt(Math.pow(obj.size, 2) - Math.pow(obj.size / 2, 2));
+
+                    // Propiedad del centroide (distancia a la base): d_base = h / 3
                     const altura_base = altura_total / 3;
+
+                    // Propiedad del centroide (distancia a la punta): d_punta = h * (2/3)
                     const altura_punta = altura_total - altura_base;
-                    
+
+                    // Definición Vértice 1 (Punta): V1 = (Cx, Cy - d_punta)
                     const x1 = obj.x, y1 = obj.y - altura_punta;
+
+                    // Definición Vértice 2 (Base Izq.): V2 = (Cx - base/2, Cy + d_base)
                     const x2 = obj.x - obj.size / 2, y2 = obj.y + altura_base;
+
+                    // Definición Vértice 3 (Base Der.): V3 = (Cx + base/2, Cy + d_base)
                     const x3 = obj.x + obj.size / 2, y3 = obj.y + altura_base;
-                    
+
+                    // --- Coordenadas Baricéntricas ---
+
+                    // Cálculo del denominador (Determinante): D = (y2-y3)(x1-x3) + (x3-x2)(y1-y3)
                     const denominator = ((y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3));
+
+                    // Coordenada 'a' (ponderación V1): a = [(y2-y3)(Px-x3) + (x3-x2)(Py-y3)] / D
                     const a = ((y2 - y3) * (pos.x - x3) + (x3 - x2) * (pos.y - y3)) / denominator;
+
+                    // Coordenada 'b' (ponderación V2): b = [(y3-y1)(Px-x3) + (x1-x3)(Py-y3)] / D
                     const b = ((y3 - y1) * (pos.x - x3) + (x1 - x3) * (pos.y - y3)) / denominator;
+
+                    // Coordenada 'c' (ponderación V3): c = 1 - a - b
                     const c = 1 - a - b;
-                    
+
+                    // Prueba de inclusión: Punto P está dentro si (a >= 0) Y (b >= 0) Y (c >= 0)
                     if (a >= 0 && b >= 0 && c >= 0) {
                         return obj;
                     }
