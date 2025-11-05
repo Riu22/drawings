@@ -44,19 +44,36 @@ document.addEventListener('DOMContentLoaded', () => {
             size: size_picker ? size_picker.value : 5,
             mode: current_mode
         };
-        // No usar localStorage en artifacts
-        // localStorage.setItem('drawingEditorConfig', JSON.stringify(editor_state));
+        localStorage.setItem('drawingEditorConfig', JSON.stringify(editor_state));
     }
 
     function load_editor_state() {
-        // No usar localStorage en artifacts
-        current_color = document.getElementById('colorPicker')?.value || '#000000';
-        current_mode = 'freeDraw';
-        if (size_picker) {
-            size_picker.value = 5;
+        const saved_state_json = localStorage.getItem('drawingEditorConfig');
+        
+        if (saved_state_json) {
+            const saved_state = JSON.parse(saved_state_json);
+            
+            // Cargar color
+            current_color = saved_state.color || '#000000';
+            const color_picker = document.getElementById('colorPicker');
+            if (color_picker) {
+                color_picker.value = current_color;
+                color_picker.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            
+            // Cargar tamaño
+            if (size_picker) {
+                size_picker.value = saved_state.size || 5;
+            }
+            
+            // Cargar modo/herramienta
+            const tool_btn = document.getElementById(saved_state.mode + 'Btn');
+            select_tool(tool_btn, saved_state.mode || 'freeDraw');
+        } else {
+            // Si no hay nada guardado, establecer valores por defecto
+            select_tool(free_draw_btn, 'freeDraw');
+            save_editor_state(); // Guardar el estado inicial por defecto
         }
-        select_tool(free_draw_btn, 'freeDraw');
-        save_editor_state();
     }
 
     // Limpiar canvas y objetos
