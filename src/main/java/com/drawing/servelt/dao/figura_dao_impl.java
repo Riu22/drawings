@@ -23,7 +23,7 @@ public class figura_dao_impl implements figura_dao {
         int id = idCounter++;
         figura newDrawing = new figura(imageData, author, title, id, objectCount);
         drawings.add(newDrawing);
-        System.out.println("✅ Dibujo guardado: " + title + " - Total: " + drawings.size());
+        System.out.println("Dibujo guardado: " + title + " - Total: " + drawings.size());
     }
 
 
@@ -45,6 +45,7 @@ public class figura_dao_impl implements figura_dao {
                 .findFirst()
                 .orElse(null);
     }
+
     @Override
     public void update_figura(figura draw) {
         for (int i = 0; i < drawings.size(); i++) {

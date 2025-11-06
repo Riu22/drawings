@@ -4,133 +4,11 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Dibujo - ${drawing.title}</title>
-    <link rel="stylesheet" href="/css/gallery.css">
-    <style>
-        .detail-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .detail-header {
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .detail-header h1 {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-
-        .detail-info {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .info-item {
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 5px;
-            border-left: 4px solid #4CAF50;
-        }
-
-        .info-item label {
-            display: block;
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        .info-item span {
-            display: block;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .drawing-canvas-container {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: #fafafa;
-            border-radius: 10px;
-        }
-
-        .drawing-canvas-container canvas {
-            border: 2px solid #ddd;
-            max-width: 100%;
-            height: auto;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #45a049;
-        }
-
-        .btn-secondary {
-            background: #2196F3;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #0b7dda;
-        }
-
-        .btn-danger {
-            background: #f44336;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #da190b;
-        }
-
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #2196F3;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/details.css">
 </head>
 <body>
     <div class="page-container">
@@ -149,7 +27,7 @@
 
                 <div class="detail-header">
                     <h1>${drawing.title}</h1>
-                    <p style="color: #666;">Por: ${drawing.author}</p>
+                    <p>Por: ${drawing.author}</p>
                 </div>
 
                 <div class="detail-info">
@@ -160,7 +38,7 @@
 
                     <div class="info-item">
                         <label>Número de Objetos:</label>
-                        <span>${drawing.objectCount} objetos</span>
+                        <span>${drawing.objectCount -1} objetos</span>
                     </div>
 
                     <div class="info-item">
@@ -176,7 +54,7 @@
 
                 <div class="drawing-canvas-container">
                     <h3>Vista del Dibujo</h3>
-                    <canvas id="drawingCanvas"></canvas>
+                    <canvas id="drawingCanvas" style="background-color: #fff;"></canvas>
                 </div>
 
                 <div class="action-buttons">
@@ -186,7 +64,7 @@
 
                     <c:if test="${canEdit}">
                         <a href="${pageContext.request.contextPath}/edit-drawing?id=${drawing.id}" class="btn btn-primary">
-                            ✏️ Editar Dibujo
+                            Editar Dibujo
                         </a>
 
                         <form action="${pageContext.request.contextPath}/gallery" method="post" style="display: inline;">
@@ -199,9 +77,9 @@
                     </c:if>
 
                     <c:if test="${!canEdit}">
-                        <button class="btn btn-primary" disabled title="Solo el autor puede editar">
-                            ✏️ Editar (No disponible)
-                        </button>
+                        <a href="#" class="btn btn-primary disabled" title="Solo el autor puede editar">
+                            Editar (No disponible)
+                        </a>
                     </c:if>
                 </div>
             </div>
