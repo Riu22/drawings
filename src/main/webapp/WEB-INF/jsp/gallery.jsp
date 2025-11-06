@@ -7,14 +7,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galería de Dibujos</title>
-    <%-- Estilos para la estructura principal (sidebar y layout) --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home.css">
-    <%-- Estilos específicos para la galería --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 </head>
 <body>
     <div class="page-container">
-        <%-- Barra lateral de navegación --%>
         <nav class="sidebar">
             <a href="/home" class="brand">Drawings</a>
             <div class="user-info">
@@ -24,7 +21,6 @@
             <a href="/logout">Logout</a>
         </nav>
 
-        <%-- Contenido principal de la página --%>
         <main class="main-content">
 
             <div class="gallery-header">
@@ -32,7 +28,6 @@
                 <p>Explora todas las creaciones de la comunidad.</p>
             </div>
 
-            <%-- Mensaje de error (si existe) --%>
             <c:if test="${not empty sessionScope.error}">
                 <div class="error-message">
                     <c:out value="${sessionScope.error}"/>
