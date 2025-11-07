@@ -35,12 +35,12 @@ public class gallery_service {
         figura drawing = figuraDAO.get_figura_by_id(id);
 
         if (drawing == null) {
-            System.out.println("⚠️ Dibujo " + id + " no encontrado");
+            System.out.println("Dibujo " + id + " no encontrado");
             return "Dibujo no encontrado.";
         }
 
         if (!drawing.getAuthor().equals(current_user)) {
-            System.out.println("⚠️ Usuario " + current_user + " intentó eliminar dibujo de " + drawing.getAuthor());
+            System.out.println("Usuario " + current_user + " intentó eliminar dibujo de " + drawing.getAuthor());
             return "No tienes permiso para eliminar este dibujo.";
         }
 
