@@ -7,9 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const circle_btn = document.getElementById('circleBtn');
     const square_btn = document.getElementById('squareBtn');
     const triangle_btn = document.getElementById('triangleBtn');
+    const star_btn = document.getElementById('starBtn');
     const free_draw_btn = document.getElementById('freeDrawBtn');
     const size_picker = document.getElementById('sizePicker');
-    const tool_buttons = [circle_btn, square_btn, triangle_btn, free_draw_btn].filter(Boolean);
+    const tool_buttons = [circle_btn, square_btn, triangle_btn, star_btn, free_draw_btn].filter(Boolean);
 
     // Botones de deshacer/rehacer
     const undo_btn = document.getElementById('undoBtn');
@@ -209,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (circle_btn) circle_btn.addEventListener('click', () => select_tool(circle_btn, 'circle'));
     if (square_btn) square_btn.addEventListener('click', () => select_tool(square_btn, 'square'));
     if (triangle_btn) triangle_btn.addEventListener('click', () => select_tool(triangle_btn, 'triangle'));
+    if (star_btn) star_btn.addEventListener('click', () => select_tool(star_btn, 'star'));
     if (free_draw_btn) free_draw_btn.addEventListener('click', () => select_tool(free_draw_btn, 'freeDraw'));
 
     // Listener para cambio de tamaño
@@ -289,6 +291,33 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.moveTo(obj.x, obj.y - altura_punta);
             ctx.lineTo(obj.x - obj.size / 2, obj.y + altura_base);
             ctx.lineTo(obj.x + obj.size / 2, obj.y + altura_base);
+            ctx.closePath();
+            ctx.fill();
+            
+            if (highlight) {
+                ctx.strokeStyle = '#00ff00';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        } else if (obj.type === 'star') {
+            // Dibujar estrella de 7 puntas
+            const num_points = 7;
+            const outer_radius = obj.size / 2;
+            const inner_radius = outer_radius * 0.4;
+            
+            ctx.beginPath();
+            for (let i = 0; i < num_points * 2; i++) {
+                const angle = (Math.PI / num_points) * i - Math.PI / 2;
+                const radius = i % 2 === 0 ? outer_radius : inner_radius;
+                const x = obj.x + Math.cos(angle) * radius;
+                const y = obj.y + Math.sin(angle) * radius;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
             ctx.closePath();
             ctx.fill();
             
@@ -406,6 +435,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (a >= 0 && b >= 0 && c >= 0) {
                         return obj;
                     }
+                } else if (obj.type === 'star') {
+                    // Detección simple por distancia al centro
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance <= obj.size / 2) {
+                        return obj;
+                    }
                 }
             }
         }
@@ -439,6 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'circle': circle_btn,
                 'square': square_btn,
                 'triangle': triangle_btn,
+                'star': star_btn,
                 'freeDraw': free_draw_btn
             };
             
@@ -494,7 +530,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const type_name = obj.type === 'circle' ? 'Cercle' : 
                             obj.type === 'square' ? 'Quadrat' : 
-                            obj.type === 'triangle' ? 'Triangle' : 'Traç';
+                            obj.type === 'triangle' ? 'Triangle' : 
+                            obj.type === 'star' ? 'Estrella' : 'Traç';
             
             item.innerHTML = `
                 <div class="object-info">

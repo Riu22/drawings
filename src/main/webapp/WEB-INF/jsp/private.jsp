@@ -28,6 +28,7 @@
                     <button id="circleBtn" class="button-link">Círculo</button>
                     <button id="squareBtn" class="button-link">Cuadrado</button>
                     <button id="triangleBtn" class="button-link">Triángulo</button>
+                    <button id="starBtn" class="button-link">estrella</button>
                     <button id="freeDrawBtn" class="button-link">Dibujo Libre</button>
                     <input type="text" id="colorPicker" data-coloris value="#000000">
                     <input type="range" id="sizePicker" min="1" max="50" value="5">

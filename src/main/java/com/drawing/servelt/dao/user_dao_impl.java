@@ -6,13 +6,10 @@ import java.util.List;
 
 public class user_dao_impl implements user_dao{
 
-    private static final List<user> users;
-
-    static {
-        users = new ArrayList<>();
-        users.add(new user("jaume", "1234", "Jaume"));
-        users.add(new user("admin", "admin", "Admin"));
-    }
+    private static final List<user> users = new ArrayList<>(List.of(
+            new user("jaume", "1234", "Jaume"),
+            new user("admin", "admin", "Admin")
+    ));
     
     public boolean checkLogin(String username, String password) {
         for (user u : users) {
