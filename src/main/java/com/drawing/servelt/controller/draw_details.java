@@ -45,11 +45,9 @@ public class draw_details extends HttpServlet {
                 return;
             }
 
-            // Verificar si el usuario puede editar
             String username = (String) session.getAttribute("user");
             boolean canEdit = detailService.can_edit(drawing, username);
 
-            // Pasar datos a la vista
             req.setAttribute("drawing", drawing);
             req.setAttribute("canEdit", canEdit);
             req.setAttribute("user", username);
