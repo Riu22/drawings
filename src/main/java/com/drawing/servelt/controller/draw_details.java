@@ -62,3 +62,5 @@ public class draw_details extends HttpServlet {
         }
     }
 }
+
+//utilizar dto y no enviar en base 64 solo en json
