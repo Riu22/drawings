@@ -1,9 +1,6 @@
 package com.drawing.servelt.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 
 public class user_dao_sql implements user_dao{
@@ -11,18 +8,18 @@ public class user_dao_sql implements user_dao{
 
     static void connect(){
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
             if (con == null){
-                con = DriverManager.getConnection(   "jdbc:mysql://mysql:3306/nombre_base_de_datos",
-                        "root",
-                        "root"
+                con = DriverManager.getConnection("jdbc:mysql://mysql:3306/drawing_app",
+                        "admin",
+                        "admin"
                 );
             }
-            Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println(con);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -49,8 +46,17 @@ public class user_dao_sql implements user_dao{
     @Override
     public void add_user(String username, String password, String name) {
         connect();
+        try {
+            PreparedStatement sql = con.prepareStatement("INSERT INTO users (username, password, name) VALUES(?,?,?)");
+            sql.setString(1,username);
+            sql.setString(2,password);
+            sql.setString(3,name);
+            sql.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-    @Override
+        @Override
     public boolean user_exists(String username) {
         connect();
         return false;

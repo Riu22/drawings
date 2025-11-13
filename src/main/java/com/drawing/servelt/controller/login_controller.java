@@ -23,8 +23,8 @@ public class login_controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String username = req.getParameter("username").trim();
+        String password = req.getParameter("password").trim();
 
         if (loginService.checkLogin(username, password)) {
             HttpSession session = req.getSession();
